@@ -1,8 +1,21 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
+import { ChangeEvent, useState } from 'react'
 
 export function NewNoteCard(){
-    return(
+  const [ShouldShowOnboarding, setShouldShowOnboarding] = useState(true) 
+
+  function handleStartEditor() {
+    setShouldShowOnboarding(false)
+  }
+
+  function handleContentChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    if (event.target.value ==  '' ) {
+      setShouldShowOnboarding(true)
+    }
+  }
+  
+  return(
       <Dialog.Root>
         <Dialog.Trigger className="rounded-nd flex flex-col bg-slate-700 p-5 gap-3 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
           <span className="text-sm font-medium text-slate-200">
@@ -24,9 +37,17 @@ export function NewNoteCard(){
               Adicionar nota
             </span>
 
-            <p className="text-sm leading-6 text-slate-400">
-              Comece <button className="font-medium text-lime-400">gravando uma nota</button> em áudio ou se preferir <button className="font-medium text-lime-400">utilize apenas texto</button>.
+            {ShouldShowOnboarding ? (
+              <p className="text-sm leading-6 text-slate-400">
+              Comece <button className="font-medium text-lime-400">gravando uma nota</button> em áudio ou se preferir <button onClick={handleStartEditor} className="font-medium text-lime-400">utilize apenas texto</button>.
             </p>
+            ) : (
+              <textarea autoFocus 
+              className="text-sm leading-6 text-slate=400 bg-transparent resize-none flex-1 outline-none"
+              onChange={handleContentChange}
+              //onClick={}
+              />
+            )}
           </div>
 
           <button 
